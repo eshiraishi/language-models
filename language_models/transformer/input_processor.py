@@ -3,20 +3,22 @@ from typing import Self
 import torch
 from torch import nn
 
+from language_models.transformer.config import InputProcessorConfig
 from language_models.transformer.positional_encoder import PositionalEncoder
 
 
 class InputProcessor(nn.Module):
-    def __init__(
-        self: Self,
-        embedding: nn.Embedding,
-        positional_encoder: PositionalEncoder,
-    ) -> None:
+    def __init__(self: Self, config: InputProcessorConfig) -> None:
         super().__init__()
-        self.embedding = embedding
-        self.positional_encoder = positional_encoder
+        self.config = config
+        self.embedder = nn.Embedding(
+            num_embeddings=self.config.embedder.n_tokens,
+            embedding_dim=self.config.embedder.embed_dim,
+            padding_idx=self.config.pad_token_int,
+        )
+        self.positional_encoder = PositionalEncoder(self.config.positional_encoder)
 
     def forward(self: Self, inputs: torch.Tensor) -> torch.Tensor:
-        embeddings = self.embedding(inputs)
-        encoded_embeddings = self.positional_encoder(embeddings)
-        return encoded_embeddings
+        outputs = self.embedder(inputs)
+        outputs = self.positional_encoder(outputs)
+        return outputs

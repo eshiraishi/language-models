@@ -4,11 +4,9 @@ from string import printable
 import numpy as np
 import torch
 
-from language_models.transformer.block import TransformerBlockConfig
-from language_models.transformer.embedding import EmbeddingConfig
+from language_models.transformer import TransformerConfig
 from language_models.transformer.executor import TransformerExecutor
 from language_models.transformer.model import Transformer
-from language_models.transformer.positional_encoder import PositionalEncoderConfig
 from language_models.transformer.tokenizer import Tokenizer, TokenizerConfig
 from language_models.utils import litstr
 
@@ -16,16 +14,9 @@ if __name__ == "__main__":
     torch.set_printoptions(linewidth=500)
 
     vocab = set(printable)
-
     tokenizer_config = TokenizerConfig()
     tokenizer = Tokenizer(vocab, tokenizer_config)
-
-    block_config = TransformerBlockConfig()
-    positional_encoder_config = PositionalEncoderConfig()
-    embedding_config = EmbeddingConfig(
-        pad_token_int=tokenizer.pad_token_int,
-        in_tokens=tokenizer.vocab_size,
-    )
+    transformer_config = TransformerConfig(tokenizer.vocab_size)
 
     i = 0
     while True:
@@ -33,13 +24,7 @@ if __name__ == "__main__":
         random.seed(i)
         np.random.seed(i)
 
-        transformer = Transformer(
-            encoder_config=block_config,
-            decoder_config=block_config,
-            embedding_config=embedding_config,
-            positional_encoder_config=positional_encoder_config,
-        )
-
+        transformer = Transformer(transformer_config)
         executor = TransformerExecutor(tokenizer, transformer)
 
         inputs = [

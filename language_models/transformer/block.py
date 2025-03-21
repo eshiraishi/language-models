@@ -1,17 +1,10 @@
-from dataclasses import dataclass
 from typing import Self
 
 import torch
 from torch import nn
 
-from language_models.transformer.multihead_attention import MultiheadAttention
-
-
-@dataclass
-class TransformerBlockConfig:
-    embed_dim: int = 512
-    n_heads: int = 8
-    hidden_dim: int = 2048
+from language_models.transformer.attention import MultiheadAttention
+from language_models.transformer.config import TransformerBlockConfig
 
 
 class TransformerBlock(nn.Module):

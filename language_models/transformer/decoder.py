@@ -3,11 +3,12 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.block import TransformerBlock, TransformerBlockConfig
-from language_models.transformer.multihead_attention import (
+from language_models.transformer.attention import (
     MultiheadAttention,
     attn_mask_like,
 )
+from language_models.transformer.block import TransformerBlock, TransformerBlockConfig
+from language_models.transformer.config import DecoderConfig
 
 
 class DecoderBlock(nn.Module):
@@ -47,16 +48,11 @@ class DecoderBlock(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(
-        self: Self,
-        n_blocks: int,
-        config: TransformerBlockConfig,
-    ) -> None:
+    def __init__(self: Self, config: DecoderConfig) -> None:
         super().__init__()
-        self.n_blocks = n_blocks
         self.config = config
         self.blocks = nn.ModuleList(
-            DecoderBlock(self.config) for _ in range(self.n_blocks)
+            DecoderBlock(self.config.block) for _ in range(self.config.n_blocks)
         )
 
     def forward(
@@ -67,7 +63,8 @@ class Decoder(nn.Module):
         encoder_outputs: torch.Tensor,
     ) -> torch.Tensor:
         block, *blocks = self.blocks
-        block_outputs = block(
+
+        outputs = block(
             queries=queries,
             keys=keys,
             values=values,
@@ -75,10 +72,11 @@ class Decoder(nn.Module):
         )
 
         for block in blocks:
-            block_outputs = block(
-                queries=block_outputs,
-                keys=block_outputs,
-                values=block_outputs,
+            outputs = block(
+                queries=outputs,
+                keys=outputs,
+                values=outputs,
                 encoder_outputs=encoder_outputs,
             )
-        return block_outputs
+
+        return outputs

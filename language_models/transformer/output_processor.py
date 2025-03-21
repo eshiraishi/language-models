@@ -3,29 +3,29 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.embedding import EmbeddingConfig
+from language_models.transformer.config import EmbedderConfig
 
 
 class OutputProcessor(nn.Module):
-    def __init__(self: Self, config: EmbeddingConfig) -> None:
+    def __init__(self: Self, config: EmbedderConfig) -> None:
         super().__init__()
 
         self.config = config
 
         self.linear = nn.Linear(
-            in_features=self.config.embed_dim,
-            out_features=self.config.out_tokens,
+            in_features=self.config.in_features,
+            out_features=self.config.out_features,
         )
 
     def forward(self: Self, inputs: torch.Tensor) -> torch.Tensor:
-        linear_outputs = self.linear(inputs)
-        batches, tokens, _ = linear_outputs.size()
+        outputs = self.linear(inputs)
 
-        probs = linear_outputs.softmax(dim=2)
-        probs = probs.view(batches * tokens, self.config.out_tokens)
+        batch_size, n_tokens, _ = outputs.size()
 
-        predictions = probs.argmax(dim=1)
-        predictions = predictions + 2
-        predictions = predictions.view(batches, tokens)
+        outputs = outputs.softmax(dim=2)
+        outputs = outputs.view(batch_size * n_tokens, self.config.out_features)
+        ouputs = outputs.argmax(dim=1)
+        ouputs = ouputs + 2
+        ouputs = ouputs.view(batch_size, n_tokens)
 
-        return predictions
+        return ouputs

@@ -3,16 +3,16 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.block import TransformerBlock, TransformerBlockConfig
+from language_models.transformer.block import TransformerBlock
+from language_models.transformer.config import EncoderConfig
 
 
 class Encoder(nn.Module):
-    def __init__(self: Self, n_blocks: int, config: TransformerBlockConfig) -> None:
+    def __init__(self: Self, config: EncoderConfig) -> None:
         super().__init__()
-        self.n_blocks = n_blocks
         self.config = config
         self.blocks = nn.ModuleList(
-            TransformerBlock(self.config) for _ in range(self.n_blocks)
+            TransformerBlock(self.config.block) for _ in range(self.config.n_blocks)
         )
 
     def forward(
@@ -22,17 +22,10 @@ class Encoder(nn.Module):
         values: torch.Tensor,
     ) -> torch.Tensor:
         block, *blocks = self.blocks
-        block_outputs = block(
-            queries=queries,
-            keys=keys,
-            values=values,
-        )
+
+        outputs = block(queries=queries, keys=keys, values=values)
 
         for block in blocks:
-            block_outputs = block(
-                queries=block_outputs,
-                keys=block_outputs,
-                values=block_outputs,
-            )
+            outputs = block(queries=outputs, keys=outputs, values=outputs)
 
-        return block_outputs
+        return outputs

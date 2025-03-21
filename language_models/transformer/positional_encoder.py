@@ -1,14 +1,9 @@
-from dataclasses import dataclass
 from typing import Self
 
 import torch
 from torch import nn
 
-
-@dataclass
-class PositionalEncoderConfig:
-    embed_dim: int = 512
-    theta: int = 10000
+from language_models.transformer.config import PositionalEncoderConfig
 
 
 class PositionalEncoder(nn.Module):
