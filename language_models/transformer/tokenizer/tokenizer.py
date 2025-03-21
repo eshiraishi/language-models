@@ -2,7 +2,7 @@ from typing import Generator, Literal, Self
 
 import torch
 
-from language_models.transformer.config import TokenizerConfig
+from language_models.transformer.tokenizer.config import TokenizerConfig
 
 
 class Tokenizer:

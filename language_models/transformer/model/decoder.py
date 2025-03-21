@@ -3,12 +3,15 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.attention import (
+from language_models.transformer.model.attention import (
     MultiheadAttention,
     attn_mask_like,
 )
-from language_models.transformer.block import TransformerBlock, TransformerBlockConfig
-from language_models.transformer.config import DecoderConfig
+from language_models.transformer.model.block import (
+    TransformerBlock,
+    TransformerBlockConfig,
+)
+from language_models.transformer.model.config import DecoderConfig
 
 
 class DecoderBlock(nn.Module):

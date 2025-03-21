@@ -3,8 +3,8 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.config import InputProcessorConfig
-from language_models.transformer.positional_encoder import PositionalEncoder
+from language_models.transformer.model.config import InputProcessorConfig
+from language_models.transformer.model.positional_encoder import PositionalEncoder
 
 
 class InputProcessor(nn.Module):

@@ -3,7 +3,7 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.config import EmbedderConfig
+from language_models.transformer.model.config import EmbedderConfig
 
 
 class OutputProcessor(nn.Module):

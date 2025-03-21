@@ -3,8 +3,8 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.attention import MultiheadAttention
-from language_models.transformer.config import TransformerBlockConfig
+from language_models.transformer.model.attention import MultiheadAttention
+from language_models.transformer.model.config import TransformerBlockConfig
 
 
 class TransformerBlock(nn.Module):

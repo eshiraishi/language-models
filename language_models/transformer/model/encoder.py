@@ -3,8 +3,8 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.block import TransformerBlock
-from language_models.transformer.config import EncoderConfig
+from language_models.transformer.model.block import TransformerBlock
+from language_models.transformer.model.config import EncoderConfig
 
 
 class Encoder(nn.Module):

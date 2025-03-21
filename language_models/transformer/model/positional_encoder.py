@@ -3,7 +3,7 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.config import PositionalEncoderConfig
+from language_models.transformer.model.config import PositionalEncoderConfig
 
 
 class PositionalEncoder(nn.Module):

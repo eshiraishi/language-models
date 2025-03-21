@@ -3,11 +3,11 @@ from typing import Self
 import torch
 from torch import nn
 
-from language_models.transformer.config import TransformerConfig
-from language_models.transformer.decoder import Decoder
-from language_models.transformer.encoder import Encoder
-from language_models.transformer.input_processor import InputProcessor
-from language_models.transformer.output_processor import OutputProcessor
+from language_models.transformer.model.config import TransformerConfig
+from language_models.transformer.model.decoder import Decoder
+from language_models.transformer.model.encoder import Encoder
+from language_models.transformer.model.input_processor import InputProcessor
+from language_models.transformer.model.output_processor import OutputProcessor
 
 
 class Transformer(nn.Module):
